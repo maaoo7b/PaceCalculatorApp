@@ -44,6 +44,7 @@ fun CalculatorTextField(
     text: String,
     label: String,
     maxLine: Int = 1,
+    enabled: Boolean,
     onTextChange: (String) -> Unit,
     onIMEAction: () -> Unit = {},
 ) {
@@ -51,6 +52,7 @@ fun CalculatorTextField(
     TextField(
         value = text,
         onValueChange = onTextChange,
+        enabled = enabled,
         colors = TextFieldDefaults.textFieldColors(containerColor = Color(0xFFDCE5D2)),
         maxLines = maxLine,
         label = { Text(text = label) },

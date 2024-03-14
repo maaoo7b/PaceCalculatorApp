@@ -1,8 +1,10 @@
 package com.maodev.pacecalculatorapp.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.maodev.pacecalculatorapp.components.CalculatorButton
 import com.maodev.pacecalculatorapp.components.CalculatorLabel
@@ -34,23 +35,22 @@ import com.maodev.pacecalculatorapp.components.CalculatorTextField
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(calculatorViewModel: MainScreenViewModel) {
     Scaffold(
         topBar = {
             MyTopAppBar()
         }
     ) {
         Column(modifier = Modifier.padding(it)) {
-            MainContent()
+            MainContent(calculatorViewModel)
         }
     }
 }
 
 @Composable
-fun MainContent() {
+fun MainContent(calculatorViewModel: MainScreenViewModel) {
     Card(
         modifier = Modifier
             .fillMaxSize()
@@ -59,55 +59,126 @@ fun MainContent() {
         elevation = CardDefaults.cardElevation(8.dp),
         shape = RoundedCornerShape(25.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            CardFields()
-        }
+        CardFields(calculatorViewModel)
     }
 
 }
 
 @Composable
-fun CardFields() {
-    var distance by remember {
+fun CardFields(calculatorViewModel: MainScreenViewModel) {
+    var kms by remember {
         mutableStateOf("")
     }
-    var time by remember {
+    var meters by remember {
         mutableStateOf("")
     }
-    var pace by remember {
+    var hours by remember {
         mutableStateOf("")
     }
-    CalculatorLabel(label = "DISTANCE", fontWeight = FontWeight.Bold, fontSize = 20)
-    CalculatorTextField(
+    var minutes by remember {
+        mutableStateOf("")
+    }
+    var seconds by remember {
+        mutableStateOf("")
+    }
+    var minPace by remember {
+        mutableStateOf("")
+    }
+    var segPace by remember {
+        mutableStateOf("")
+    }
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        text = distance,
-        label = "Distance",
-        onTextChange = { distance = it })
-    CalculatorLabel(label = "TIME", fontWeight = FontWeight.Bold, fontSize = 20)
-    CalculatorTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        text = time,
-        label = "Time",
-        onTextChange = { time = it })
-    CalculatorLabel(label = "PACE", fontWeight = FontWeight.Bold, fontSize = 20)
-    CalculatorTextField(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        text = pace,
-        label = "Pace",
-        onTextChange = { pace = it })
-    Spacer(modifier = Modifier.height(50.dp))
-    CalculatorButton(text = "CALCULAR", onClick = { /*TODO*/ }, modifier = Modifier.width(200.dp).height(50.dp))
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        CalculatorLabel(label = "DISTANCE", fontWeight = FontWeight.Bold, fontSize = 20)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = kms,
+                label = "Kms",
+                enabled = true,
+                onTextChange = { kms = it })
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = meters,
+                label = "Meters",
+                enabled = true,
+                onTextChange = { meters = it })
+        }
+        CalculatorLabel(label = "TIME", fontWeight = FontWeight.Bold, fontSize = 20)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = hours,
+                label = "Hours",
+                enabled = true,
+                onTextChange = { hours = it })
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = minutes,
+                label = "Minutes",
+                enabled = true,
+                onTextChange = { minutes = it })
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = seconds,
+                label = "Seconds",
+                enabled = true,
+                onTextChange = { seconds = it })
+        }
+        CalculatorLabel(label = "PACE", fontWeight = FontWeight.Bold, fontSize = 20)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = minPace,
+                label = "MinPace",
+                enabled = true,
+                onTextChange = { minPace = it })
+            CalculatorTextField(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .weight(1f),
+                text = segPace,
+                label = "SecPace",
+                enabled = true,
+                onTextChange = { segPace = it })
+        }
+        Spacer(modifier = Modifier.height(50.dp))
+        CalculatorButton(
+            text = "CALCULAR",
+            onClick = {
+                Log.d("PACE", "gg+")
+            },
+            modifier = Modifier
+                .width(200.dp)
+                .height(50.dp)
+        )
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
