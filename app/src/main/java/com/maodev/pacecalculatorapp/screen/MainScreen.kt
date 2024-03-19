@@ -87,6 +87,9 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
     var segPace by remember {
         mutableStateOf("")
     }
+    var flag by remember {
+        mutableStateOf(true)
+    }
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -105,7 +108,12 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                 text = kms,
                 label = "Kms",
                 enabled = true,
-                onTextChange = { kms = it })
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        kms = it
+                })
             CalculatorTextField(
                 modifier = Modifier
                     .padding(8.dp)
@@ -113,7 +121,12 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                 text = meters,
                 label = "Meters",
                 enabled = true,
-                onTextChange = { meters = it })
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        meters = it
+                })
         }
         CalculatorLabel(label = "TIME", fontWeight = FontWeight.Bold, fontSize = 20)
         Row(
@@ -127,7 +140,12 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                 text = hours,
                 label = "Hours",
                 enabled = true,
-                onTextChange = { hours = it })
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        hours = it
+                })
             CalculatorTextField(
                 modifier = Modifier
                     .padding(8.dp)
@@ -135,7 +153,12 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                 text = minutes,
                 label = "Minutes",
                 enabled = true,
-                onTextChange = { minutes = it })
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        minutes = it
+                })
             CalculatorTextField(
                 modifier = Modifier
                     .padding(8.dp)
@@ -143,7 +166,12 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                 text = seconds,
                 label = "Seconds",
                 enabled = true,
-                onTextChange = { seconds = it })
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        seconds = it
+                })
         }
         CalculatorLabel(label = "PACE", fontWeight = FontWeight.Bold, fontSize = 20)
         Row(
@@ -156,22 +184,41 @@ fun CardFields(calculatorViewModel: MainScreenViewModel) {
                     .weight(1f),
                 text = minPace,
                 label = "MinPace",
-                enabled = true,
-                onTextChange = { minPace = it })
+                enabled = false,
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        minPace = it
+                })
             CalculatorTextField(
                 modifier = Modifier
                     .padding(8.dp)
                     .weight(1f),
                 text = segPace,
                 label = "SecPace",
-                enabled = true,
-                onTextChange = { segPace = it })
+                enabled = false,
+                onTextChange = {
+                    if (it.all { char ->
+                            char.isDigit()
+                        })
+                        segPace = it
+                })
         }
         Spacer(modifier = Modifier.height(50.dp))
         CalculatorButton(
             text = "CALCULAR",
             onClick = {
-                Log.d("PACE", "gg+")
+                val pace = calculatorViewModel.calculatePace(
+                    distanceKm = kms.toDouble(),
+                    distanceMts = meters.toDouble(),
+                    timeHour = hours.toDouble(),
+                    timeMin = minutes.toDouble()
+                ).toString()
+                val gg = pace.split( ".")
+                minPace = gg[0]
+                segPace = gg[1].substring(0, 2)
+                Log.d("PACE", "gg+ $gg")
             },
             modifier = Modifier
                 .width(200.dp)
